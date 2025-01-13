@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulário de Categoria</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper blue">
+            <a href="/" class="brand-logo center">Categoria</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h4 th:text="${categoria.id == null ? 'Nova Categoria' : 'Editar Categoria'}"></h4>
+        <form th:action="@{/categorias/salvar}" th:object="${categoria}" method="post">
+            <div class="input-field">
+                <input type="text" id="nome" name="nome" th:field="*{nome}" required>
+                <label for="nome">Nome da Categoria</label>
+            </div>
+            <button type="submit" class="btn waves-effect waves-light green">Salvar</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Categorias</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper blue">
+            <a href="/" class="brand-logo center">Categorias</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h4>Categorias</h4>
+        <a href="/categorias/nova" class="btn waves-effect waves-light green">Adicionar Nova Categoria</a>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="categoria : ${categorias}">
+                    <td th:text="${categoria.nome}"></td>
+                    <td>
+                        <a th:href="@{'/categorias/editar/' + ${categoria.id}}" class="btn blue">Editar</a>
+                        <a th:href="@{'/categorias/excluir/' + ${categoria.id}}" class="btn red" onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
