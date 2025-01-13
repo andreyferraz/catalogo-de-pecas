@@ -1,0 +1,16 @@
+out
+.classpath
+.project
+.settings
+.metadata
+/src/main/resources/application.properties
+*.log
+*.zip
+*.class
+*.swp
+target
+classes
+build
+bin
+classes
+*~
