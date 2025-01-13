@@ -32,7 +32,7 @@ public class ProdutoController {
     @GetMapping
     public String listarProdutos(Model model) {
         model.addAttribute("produtos", produtoRepository.findAll());
-        return "produtos/lista";
+        return "produtos/listar";
     }
 
     @GetMapping("/novo")

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulário de Produto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper blue">
+            <a href="/" class="brand-logo center">Produto</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h4 th:text="${produto.id == null ? 'Novo Produto' : 'Editar Produto'}"></h4>
+        <form th:action="@{/produtos/salvar}" th:object="${produto}" method="post">
+            <div class="input-field">
+                <input type="text" id="nome" name="nome" th:field="*{nome}" required>
+                <label for="nome">Nome do Produto</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="imagemUrl" name="imagemUrl" th:field="*{imagemUrl}">
+                <label for="imagemUrl">URL da Imagem</label>
+            </div>
+            <div class="input-field">
+                <select th:field="*{categoria}">
+                    <option value="" disabled selected>Selecione uma categoria</option>
+                    <option th:each="categoria : ${categorias}" th:value="${categoria}" th:text="${categoria.nome}"></option>
+                </select>
+                <label>Categoria</label>
+            </div>
+            <button type="submit" class="btn waves-effect waves-light green">Salvar</button>
+        </form>
+    </div>
+
+    <script>
+        // Inicializa o select do Materialize após renderizar
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems);
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
