@@ -21,9 +21,18 @@ public class Produto {
     private UUID id;
 
     private String nome;
-    private String imagemUrl;
+    private String imagemPath;
 
     @ManyToOne
     private Categoria categoria;
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", categoria=" + (categoria != null ? categoria.getId() : null) +
+                '}';
+    }
 
 }
