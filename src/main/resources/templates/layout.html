@@ -28,6 +28,10 @@
                 <li th:each="categoria : ${categorias}">
                     <a th:href="@{'/categorias/' + ${categoria.id}}" th:text="${categoria.nome}"></a>
                 </li>
+                    <!-- Link para painel (visível quando autenticado) -->
+                    <li sec:authorize="isAuthenticated()">
+                    <a href="/admin/dashboard">Painel</a>
+                </li>  
                 <!-- Link para Login (visível quando não autenticado) -->
                 <li sec:authorize="isAnonymous()">
                     <a href="/login">Login</a>

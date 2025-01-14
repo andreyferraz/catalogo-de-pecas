@@ -16,31 +16,28 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/uploads/**").permitAll()
-                    // Permitindo acesso a URLs sem necessidade de login
-                    .requestMatchers("/", "/categorias/**", "/login", "/logout").permitAll()
-                    // Páginas que requerem autenticação
-                    .requestMatchers(
-                        "/categorias/formulario", 
-                        "/categorias/listar", 
-                        "/produtos", 
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers("/", "/categorias/**", "/login", "/logout").permitAll()
+                .requestMatchers(
+                        "/categorias/formulario",
+                        "/categorias/listar",
+                        "/produtos",
                         "/produtos/novo",
                         "/produtos/salvar",
-                        "/produtos/formulario", 
-                        "/produtos/listar", 
-                        "/admin/dashboard").authenticated()
-                    // Páginas com restrição para o papel ADMIN
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                )
+                        "/produtos/formulario",
+                        "/produtos/listar",
+                        "/admin/dashboard")
+                .authenticated()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/admin/dashboard", true)  // Página após login bem-sucedido
+                        .defaultSuccessUrl("/admin/dashboard", true) // Página após login bem-sucedido
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutUrl("/logout")  // URL para logout
-                        .logoutSuccessUrl("/")  // Página após logout
+                        .logoutUrl("/logout") // URL para logout
+                        .logoutSuccessUrl("/login") // Página após logout
                         .permitAll())
                 .csrf().disable(); // Desabilita CSRF, se necessário (dependendo do seu uso)
         return http.build();
@@ -49,16 +46,15 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User.withUsername("admin")
-                .password(passwordEncoder().encode("123"))  // senha criptografada
+                .password(passwordEncoder().encode("123")) // senha criptografada
                 .roles("ADMIN")
                 .build();
-
 
         return new InMemoryUserDetailsManager(user);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // Codificador de senha
+        return new BCryptPasswordEncoder(); // Codificador de senha
     }
 }

@@ -3,6 +3,7 @@ package com.andreyferraz.catalogo_de_pecas.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -18,6 +19,7 @@ public class ThymeleafConfig {
         templateEngine.setTemplateResolver(templateResolver());
         templateEngine.addDialect(new LayoutDialect()); // Adiciona o layout dialect
         templateEngine.addDialect(new Java8TimeDialect());
+        templateEngine.addDialect(new SpringSecurityDialect());
         return templateEngine;
     }
 
