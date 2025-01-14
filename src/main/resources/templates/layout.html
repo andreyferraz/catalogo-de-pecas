@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Catálogo de Usinagem</title>
     <meta charset="UTF-8">
@@ -26,6 +27,14 @@
                 <li><a href="/">Home</a></li>
                 <li th:each="categoria : ${categorias}">
                     <a th:href="@{'/categorias/' + ${categoria.id}}" th:text="${categoria.nome}"></a>
+                </li>
+                <!-- Link para Login (visível quando não autenticado) -->
+                <li sec:authorize="isAnonymous()">
+                    <a href="/login">Login</a>
+                </li>
+                <!-- Link para Logout (visível quando autenticado) -->
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/logout">Sair</a>
                 </li>                
             </ul>
         </div>
