@@ -14,6 +14,8 @@
     <div class="container">
         <h4 th:text="${categoria.id == null ? 'Nova Categoria' : 'Editar Categoria'}"></h4>
         <form th:action="@{/categorias/salvar}" th:object="${categoria}" method="post">
+            <!-- Campo oculto para o ID da categoria -->
+            <input type="hidden" th:field="*{id}">
             <div class="input-field">
                 <input type="text" id="nome" name="nome" th:field="*{nome}" required>
                 <label for="nome">Nome da Categoria</label>
@@ -21,5 +23,6 @@
             <button type="submit" class="btn waves-effect waves-light green">Salvar</button>
         </form>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>

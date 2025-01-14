@@ -64,7 +64,7 @@ public class ProdutoController {
             model.addAttribute("categorias", categoriaRepository.findAll());
             return "produtos/formulario";
         }
-    
+
         if (!imagem.isEmpty()) {
             try {
                 // Caminho dentro do projeto, na pasta static/uploads
@@ -73,15 +73,15 @@ public class ProdutoController {
                     Files.createDirectories(uploadPath);
                     System.out.println("Diretório de upload criado: " + uploadPath.toAbsolutePath().toString());
                 }
-    
+
                 // Caminho completo do arquivo
                 Path caminho = uploadPath.resolve(imagem.getOriginalFilename());
                 System.out.println("Salvando imagem em: " + caminho.toAbsolutePath().toString());
-    
+
                 // Transferir o arquivo
                 imagem.transferTo(caminho.toFile());
                 System.out.println("Imagem salva com sucesso: " + caminho.toAbsolutePath().toString());
-    
+
                 // Configurar o caminho da imagem no produto
                 produto.setImagemPath("/uploads/" + imagem.getOriginalFilename());
             } catch (IOException e) {
@@ -90,15 +90,21 @@ public class ProdutoController {
                 model.addAttribute("categorias", categoriaRepository.findAll());
                 return "produtos/formulario";
             }
+        } else {
+            // Mantem a imagem existente se nenhuma nova imagem for enviada
+            if (produto.getId() != null) {
+                Produto produtoExistente = produtoRepository.findById(produto.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("Produto inválido"));
+                produto.setImagemPath(produtoExistente.getImagemPath());
+            }
         }
-    
+
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new IllegalArgumentException("Categoria inválida"));
         produto.setCategoria(categoria);
         produtoRepository.save(produto);
         return "redirect:/produtos";
     }
-    
 
     @GetMapping("/editar/{id}")
     public String exibirFormularioEdicao(@PathVariable UUID id, Model model) {
