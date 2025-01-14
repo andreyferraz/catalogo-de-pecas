@@ -1,21 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <title>Catálogo de peças para Usinagem</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper blue">
-            <a href="/" class="brand-logo center">Catálogo</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        <h3>Bem-vindo ao Catálogo de Usinagem</h3>
-        <p>Use o menu para navegar pelo sistema.</p>
+    <div layout:fragment="content">
+        
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>

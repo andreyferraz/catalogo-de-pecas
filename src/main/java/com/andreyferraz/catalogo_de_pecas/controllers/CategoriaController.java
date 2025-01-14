@@ -3,6 +3,7 @@ package com.andreyferraz.catalogo_de_pecas.controllers;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.andreyferraz.catalogo_de_pecas.models.Categoria;
 import com.andreyferraz.catalogo_de_pecas.repositories.CategoriaRepository;
+import com.andreyferraz.catalogo_de_pecas.repositories.ProdutoRepository;
 
 import jakarta.validation.Valid;
 
@@ -22,15 +24,30 @@ import jakarta.validation.Valid;
 public class CategoriaController {
 
     private final CategoriaRepository categoriaRepository;
+    private final ProdutoRepository produtoRepository;
 
-    public CategoriaController(CategoriaRepository categoriaRepository) {
+    public CategoriaController(CategoriaRepository categoriaRepository, ProdutoRepository produtoRepository) {
         this.categoriaRepository = categoriaRepository;
+        this.produtoRepository = produtoRepository;
+    }
+
+    @ModelAttribute("categorias")
+    public List<Categoria> carregarCategorias(){
+        return categoriaRepository.findAll();
     }
 
     @GetMapping
     public String listarCategorias(Model model) {
         model.addAttribute("categorias", categoriaRepository.findAll());
         return "categorias/listar";
+    }
+
+    @GetMapping("/{id}")
+    public String listarProdutosPorCategoria(@PathVariable UUID id, Model model){
+        model.addAttribute("categoria", categoriaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Categoria inválida")));
+        model.addAttribute("produtos", produtoRepository.findByCategoriaId(id));
+        return "categorias/produtos";
     }
 
     @GetMapping("/nova")

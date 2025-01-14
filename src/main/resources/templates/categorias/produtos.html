@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Produtos da Categoria</title>
+    <style>
+        .product-icon {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+    </style>
+    <meta charset="UTF-8"> <!-- Configurar charset para UTF-8 -->
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container">
+            <h3 th:text="'Produtos da Categoria: ' + ${categoria.nome}"></h3>
+            <ul class="collection">
+                <li class="collection-item" th:each="produto : ${produtos}">
+                    <div>
+                        <!-- Imagem do Produto -->
+                        <img 
+                            th:src="${produto.imagemPath}" 
+                            alt="Imagem do Produto" 
+                            class="product-icon"
+                            onerror="this.src='/images/default-product.png'" />
+                        <!-- Nome do Produto -->
+                        <span th:text="${produto.nome}"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

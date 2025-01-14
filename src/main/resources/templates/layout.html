@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Catálogo de Usinagem</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        .nav-wrapper .brand-logo {
+            left: 0;
+            transform: translateX(0);
+        }
+        .nav-wrapper .center-menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu de navegação -->
+    <nav>
+        <div class="nav-wrapper blue">
+            <a href="/" class="brand-logo">Catálogo</a>
+            <ul id="nav-mobile" class="center-menu">
+                <li><a href="/">Home</a></li>
+                <li th:each="categoria : ${categorias}">
+                    <a th:href="@{'/categorias/' + ${categoria.id}}" th:text="${categoria.nome}"></a>
+                </li>                
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo da página -->
+    <div class="container" layout:fragment="content">
+        <!-- Aqui o conteúdo da página será inserido -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
