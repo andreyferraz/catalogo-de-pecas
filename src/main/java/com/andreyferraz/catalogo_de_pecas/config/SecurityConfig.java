@@ -14,46 +14,50 @@ import org.springframework.security.core.userdetails.User;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/uploads/**", "/img/**").permitAll()
-                .requestMatchers("/", "/home", "/categorias/**", "/login", "/logout", "/pesquisar").permitAll()
-                .requestMatchers(
-                        "/categorias/formulario",
-                        "/categorias/listar",
-                        "/produtos/novo",
-                        "/produtos/salvar",
-                        "/produtos/formulario",
-                        "/produtos/listar",
-                        "/admin/dashboard")
-                .authenticated()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/admin/dashboard", true)
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
-                        .permitAll())
-                .csrf().disable();
-        return http.build();
-    }
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http.authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers("/uploads/**", "/img/**").permitAll()
+                                .requestMatchers("/", "/home", "/categorias/{id}", "/login", "/logout", "/pesquisar")
+                                .permitAll() // Apenas '/categorias/{id}' é público
+                                .requestMatchers(
+                                                "/categorias",
+                                                "/categorias/formulario",
+                                                "/categorias/listar",
+                                                "/produtos/novo",
+                                                "/produtos/salvar",
+                                                "/produtos/formulario",
+                                                "/produtos/listar",
+                                                "/categorias-editar",
+                                                "/admin/dashboard")
+                                .authenticated()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .anyRequest().authenticated())
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withUsername("admin")
-                .password(passwordEncoder().encode("123"))
-                .roles("ADMIN")
-                .build();
+                                .formLogin(form -> form
+                                                .loginPage("/login")
+                                                .defaultSuccessUrl("/admin/dashboard", true)
+                                                .permitAll())
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/login")
+                                                .permitAll())
+                                .csrf().disable();
+                return http.build();
+        }
 
-        return new InMemoryUserDetailsManager(user);
-    }
+        @Bean
+        public UserDetailsService userDetailsService() {
+                UserDetails user = User.withUsername("admin")
+                                .password(passwordEncoder().encode("123"))
+                                .roles("ADMIN")
+                                .build();
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+                return new InMemoryUserDetailsManager(user);
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 }

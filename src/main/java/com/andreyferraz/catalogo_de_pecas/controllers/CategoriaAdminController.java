@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,14 +22,12 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/categorias")
-public class CategoriaController {
+public class CategoriaAdminController {
 
     private final CategoriaRepository categoriaRepository;
-    private final ProdutoRepository produtoRepository;
 
-    public CategoriaController(CategoriaRepository categoriaRepository, ProdutoRepository produtoRepository) {
+    public CategoriaAdminController(CategoriaRepository categoriaRepository, ProdutoRepository produtoRepository) {
         this.categoriaRepository = categoriaRepository;
-        this.produtoRepository = produtoRepository;
     }
 
     @ModelAttribute("categorias")
@@ -40,14 +39,6 @@ public class CategoriaController {
     public String listarCategorias(Model model) {
         model.addAttribute("categorias", categoriaRepository.findAll());
         return "categorias/listar";
-    }
-
-    @GetMapping("/{id}")
-    public String listarProdutosPorCategoria(@PathVariable UUID id, Model model){
-        model.addAttribute("categoria", categoriaRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Categoria inválida")));
-        model.addAttribute("produtos", produtoRepository.findByCategoriaId(id));
-        return "categorias/produtos";
     }
 
     @GetMapping("/nova")
