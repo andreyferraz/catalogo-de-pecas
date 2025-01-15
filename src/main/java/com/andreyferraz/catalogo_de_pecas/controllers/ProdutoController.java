@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,11 @@ public class ProdutoController {
     public ProdutoController(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository) {
         this.produtoRepository = produtoRepository;
         this.categoriaRepository = categoriaRepository;
+    }
+
+    @ModelAttribute("categorias")
+    public List<Categoria> carregarCategorias(){
+        return categoriaRepository.findAll();
     }
 
     @GetMapping

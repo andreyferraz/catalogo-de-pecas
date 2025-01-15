@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout}">
 <head>
     <title>Formulário de Categoria</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper blue">
-            <a href="/" class="brand-logo center">Categoria</a>
-        </div>
-    </nav>
 
+    <div layout:fragment="content">
     <div class="container">
         <h4 th:text="${categoria.id == null ? 'Nova Categoria' : 'Editar Categoria'}"></h4>
         <form th:action="@{/categorias/salvar}" th:object="${categoria}" method="post">
@@ -23,6 +20,7 @@
             <button type="submit" class="btn waves-effect waves-light green">Salvar</button>
         </form>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </div>
+
 </body>
 </html>

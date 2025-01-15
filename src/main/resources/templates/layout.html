@@ -6,6 +6,7 @@
     <title>Catálogo de Usinagem</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .nav-wrapper .brand-logo {
             left: 0;
@@ -24,21 +25,21 @@
         <div class="nav-wrapper blue">
             <a href="/" class="brand-logo">Catálogo</a>
             <ul id="nav-mobile" class="center-menu">
-                <li><a href="/">Home</a></li>
+                <li><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
                 <li th:each="categoria : ${categorias}">
                     <a th:href="@{'/categorias/' + ${categoria.id}}" th:text="${categoria.nome}"></a>
                 </li>
                     <!-- Link para painel (visível quando autenticado) -->
                     <li sec:authorize="isAuthenticated()">
-                    <a href="/admin/dashboard">Painel</a>
+                    <a href="/admin/dashboard"> <i class="fa-solid fa-screwdriver-wrench"></i> Painel</a>
                 </li>  
                 <!-- Link para Login (visível quando não autenticado) -->
                 <li sec:authorize="isAnonymous()">
-                    <a href="/login">Login</a>
+                    <a href="/login"> <i class="fa-solid fa-right-to-bracket"></i> Login</a>
                 </li>
                 <!-- Link para Logout (visível quando autenticado) -->
                 <li sec:authorize="isAuthenticated()">
-                    <a href="/logout">Sair</a>
+                    <a href="/logout"><i class="fa-solid fa-power-off"></i> Sair</a>
                 </li>                
             </ul>
         </div>

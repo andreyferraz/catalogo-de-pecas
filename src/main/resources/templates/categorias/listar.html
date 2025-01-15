@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout}">
 <head>
     <title>Lista de Categorias</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
 </head>
 <body>
     <nav>
@@ -11,9 +12,10 @@
         </div>
     </nav>
 
+    <div layout:fragment="content">
     <div class="container">
         <h4>Categorias</h4>
-        <a href="/admin/categorias/nova" class="btn waves-effect waves-light green">Adicionar Nova Categoria</a>
+        <a href="/categorias/nova" class="btn waves-effect waves-light green">Adicionar Nova Categoria</a>
         <table class="striped">
             <thead>
                 <tr>
@@ -32,5 +34,7 @@
             </tbody>
         </table>
     </div>
+</div>
+
 </body>
 </html>

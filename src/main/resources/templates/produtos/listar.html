@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
 <head>
     <title>Lista de Produtos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <style>
         .product-icon {
             width: 50px;
@@ -11,43 +12,40 @@
         }
     </style>
 </head>
-<body>
-    <nav>
-        <div class="nav-wrapper blue">
-            <a href="/" class="brand-logo center">Produtos</a>
-        </div>
-    </nav>
 
-    <div class="container">
-        <h4>Produtos</h4>
-        <a href="/produtos/novo" class="btn waves-effect waves-light green">Adicionar Novo Produto</a>
-        <table class="striped">
-            <thead>
-                <tr>
-                    <th>Imagem</th>
-                    <th>Nome</th>
-                    <th>Categoria</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="produto : ${produtos}">
-                    <td>
-                        <img 
-                            th:src="${produto.imagemPath}" 
-                            alt="Imagem do Produto" 
-                            class="product-icon"
-                            onerror="this.src='/images/default-product.png'" />
-                    </td>
-                    <td th:text="${produto.nome}"></td>
-                    <td th:text="${produto.categoria.nome}"></td>
-                    <td>
-                        <a th:href="@{'/produtos/editar/' + ${produto.id}}" class="btn blue">Editar</a>
-                        <a th:href="@{'/produtos/excluir/' + ${produto.id}}" class="btn red" onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+<body>
+
+    <div layout:fragment="content">
+        <div class="container">
+            <h4>Produtos</h4>
+            <a href="/produtos/novo" class="btn waves-effect waves-light green">Adicionar Novo Produto</a>
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Imagem</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="produto : ${produtos}">
+                        <td>
+                            <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="product-icon"
+                                onerror="this.src='/images/default-product.png'" />
+                        </td>
+                        <td th:text="${produto.nome}"></td>
+                        <td th:text="${produto.categoria.nome}"></td>
+                        <td>
+                            <a th:href="@{'/produtos/editar/' + ${produto.id}}" class="btn blue">Editar</a>
+                            <a th:href="@{'/produtos/excluir/' + ${produto.id}}" class="btn red"
+                                onclick="return confirm('Deseja realmente excluir?')">Excluir</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
+
 </html>
