@@ -18,11 +18,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/uploads/**").permitAll()
-                .requestMatchers("/", "/categorias/**", "/login", "/logout").permitAll()
+                .requestMatchers("/", "/home", "/categorias/**", "/login", "/logout", "/pesquisar").permitAll()
                 .requestMatchers(
                         "/categorias/formulario",
                         "/categorias/listar",
-                        "/produtos",
                         "/produtos/novo",
                         "/produtos/salvar",
                         "/produtos/formulario",
@@ -33,20 +32,20 @@ public class SecurityConfig {
                 .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/admin/dashboard", true) // Página após login bem-sucedido
+                        .defaultSuccessUrl("/admin/dashboard", true)
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutUrl("/logout") // URL para logout
-                        .logoutSuccessUrl("/login") // Página após logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
                         .permitAll())
-                .csrf().disable(); // Desabilita CSRF, se necessário (dependendo do seu uso)
+                .csrf().disable();
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User.withUsername("admin")
-                .password(passwordEncoder().encode("123")) // senha criptografada
+                .password(passwordEncoder().encode("123"))
                 .roles("ADMIN")
                 .build();
 
@@ -55,6 +54,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Codificador de senha
+        return new BCryptPasswordEncoder();
     }
 }

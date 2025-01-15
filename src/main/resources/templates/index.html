@@ -3,11 +3,62 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <title>Catálogo de peças para Usinagem</title>
-</head>
+
 <body>
     <div layout:fragment="content">
+
+        <div class="container">
+            <h3>Bem-vindo ao nosso Catálogo de Peças para Usinagem</h3>
+            <form th:action="@{/pesquisar}" method="get">
+                <div class="input-field">
+                    <input type="text" name="nome" placeholder="Pesquisar produto pelo nome" required>
+                    <button type="submit" class="btn waves-effect waves-light blue">Pesquisar</button>
+                </div>
+            </form>
+
+            <!-- Mensagem de erro -->
+            <div th:if="${pesquisaRealizada} and ${mensagem}" class="card-panel red lighten-4">
+                <span th:text="${mensagem}"></span>
+            </div>
+    
+            <!-- Resultados da pesquisa -->
+            <div th:if="${pesquisaRealizada} and ${produtos != null}">
+                <h4>Resultados da Pesquisa</h4>
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Imagem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="produto : ${produtos}">
+                            <td th:text="${produto.nome}"></td>
+                            <td th:text="${produto.categoria.nome}"></td>
+                            <td>
+                                <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="product-icon"
+                                    onerror="this.src='/images/default-product.png'" width="50" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Exibição dos 16 últimos produtos -->
+            <div class="row">
+                <div class="col s12 m6 l3" th:each="produto : ${ultimosProdutos}">
+                    <div class="card">
+                        <div class="card-image">
+                            <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="responsive-img" onerror="this.src='/images/default-product.png'"/>
+                        </div>
+                        <div class="card-content">
+                            <span id="titulo-produto-home" class="card-title" th:text="${produto.nome}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
     </div>
 </body>
