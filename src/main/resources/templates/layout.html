@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Mister Tool - Peças para usinagem</title>
+    <title>Mister Tools - Peças para usinagem</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -28,8 +28,10 @@
         }
 
         .nav-wrapper .brand-logo {
-            left: 0;
-            transform: translateX(0);
+            display: flex;
+            align-items: center;
+            padding-left: 40px;
+            margin-top: 6px;  /* Ajuste a margem esquerda conforme necessário */
         }
 
         .nav-wrapper .center-menu {
@@ -48,7 +50,9 @@
     <!-- Menu de navegação -->
     <nav>
         <div class="nav-wrapper blue">
-            <a href="/" class="brand-logo">Catálogo</a>
+            <a href="/" class="brand-logo">
+                <img th:src="@{/img/mister-tools-logo@320x.png}" alt="Catálogo" style="height: 50px;">
+            </a>
             <ul id="nav-mobile" class="center-menu">
                 <li><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
                 <li th:each="categoria : ${categorias}">
