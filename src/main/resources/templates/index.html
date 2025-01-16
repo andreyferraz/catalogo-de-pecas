@@ -4,11 +4,31 @@
       layout:decorate="~{layout}"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<head>
+    <title>Catálogo de Peças para Usinagem</title>
+    <meta charset="UTF-8"> <!-- Configurar charset para UTF-8 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        .product-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+        .card-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .product-form {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
 <body>
     <div layout:fragment="content">
-
         <div class="container">
-            <h3>Bem-vindo ao nosso Catálogo de Peças para Usinagem</h3>
+            <h3 class="center-align">Bem-vindo ao nosso Catálogo de Peças para Usinagem</h3>
             <form th:action="@{/pesquisar}" method="get">
                 <div class="input-field">
                     <input type="text" name="nome" placeholder="Pesquisar produto pelo nome" required>
@@ -20,7 +40,7 @@
             <div th:if="${pesquisaRealizada} and ${mensagem}" class="card-panel red lighten-4">
                 <span th:text="${mensagem}"></span>
             </div>
-    
+
             <!-- Resultados da pesquisa -->
             <div th:if="${pesquisaRealizada} and ${produtos != null}">
                 <h4>Resultados da Pesquisa</h4>
@@ -30,6 +50,7 @@
                             <th>Nome</th>
                             <th>Categoria</th>
                             <th>Imagem</th>
+                            <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,13 +59,18 @@
                             <td th:text="${produto.categoria.nome}"></td>
                             <td>
                                 <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="product-icon"
-                                    onerror="this.src='/images/default-product.png'" width="50" />
+                                     onerror="this.src='/images/default-product.png'" />
                             </td>
                             <td>
-                                <form th:action="@{/carrinho/adicionar}" method="post">
+                                <form th:action="@{/carrinho/adicionar}" method="post" class="product-form">
                                     <input type="hidden" name="produtoId" th:value="${produto.id}">
-                                    <input type="number" name="quantidade" value="1" min="1">
-                                    <button type="submit" class="btn green">Adicionar ao Carrinho</button>
+                                    <div class="input-field">
+                                        <input type="number" name="quantidade" value="1" min="1" class="validate">
+                                        <label for="quantidade">Quantidade</label>
+                                    </div>
+                                    <button type="submit" class="btn waves-effect waves-light green">
+                                        <i class="fa-solid fa-cart-shopping"></i> Adicionar ao Carrinho
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -57,23 +83,30 @@
                 <div class="col s12 m6 l3" th:each="produto : ${ultimosProdutos}">
                     <div class="card">
                         <div class="card-image">
-                            <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="responsive-img" onerror="this.src='/images/default-product.png'"/>
+                            <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="responsive-img"
+                                 onerror="this.src='/images/default-product.png'" />
                         </div>
                         <div class="card-content">
                             <span id="titulo-produto-home" class="card-title" th:text="${produto.nome}"></span>
                         </div>
-                        <td>
-                            <form th:action="@{/carrinho/adicionar}" method="post">
+                        <div class="card-action">
+                            <form th:action="@{/carrinho/adicionar}" method="post" class="product-form">
                                 <input type="hidden" name="produtoId" th:value="${produto.id}">
-                                <input type="number" name="quantidade" value="1" min="1">
-                                <button type="submit" class="btn green"><i class="fa-solid fa-cart-shopping"></i></button>
+                                <div class="input-field">
+                                    <input type="number" name="quantidade" value="1" min="1" class="validate">
+                                    <label for="quantidade">Quantidade</label>
+                                </div>
+                                <button type="submit" class="btn waves-effect waves-light green">
+                                    <i class="fa-solid fa-cart-shopping"></i> Adicionar ao Carrinho
+                                </button>
                             </form>
-                        </td>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
