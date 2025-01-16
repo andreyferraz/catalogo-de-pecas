@@ -40,6 +40,13 @@
                                 <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="product-icon"
                                     onerror="this.src='/images/default-product.png'" width="50" />
                             </td>
+                            <td>
+                                <form th:action="@{/carrinho/adicionar}" method="post">
+                                    <input type="hidden" name="produtoId" th:value="${produto.id}">
+                                    <input type="number" name="quantidade" value="1" min="1">
+                                    <button type="submit" class="btn green">Adicionar ao Carrinho</button>
+                                </form>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -55,6 +62,13 @@
                         <div class="card-content">
                             <span id="titulo-produto-home" class="card-title" th:text="${produto.nome}"></span>
                         </div>
+                        <td>
+                            <form th:action="@{/carrinho/adicionar}" method="post">
+                                <input type="hidden" name="produtoId" th:value="${produto.id}">
+                                <input type="number" name="quantidade" value="1" min="1">
+                                <button type="submit" class="btn green"><i class="fa-solid fa-cart-shopping"></i></button>
+                            </form>
+                        </td>
                     </div>
                 </div>
             </div>

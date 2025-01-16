@@ -7,13 +7,16 @@ import java.util.UUID;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.andreyferraz.catalogo_de_pecas.models.CarrinhoItem;
+import com.andreyferraz.catalogo_de_pecas.models.Categoria;
 import com.andreyferraz.catalogo_de_pecas.models.Produto;
+import com.andreyferraz.catalogo_de_pecas.repositories.CategoriaRepository;
 import com.andreyferraz.catalogo_de_pecas.repositories.ProdutoRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -23,9 +26,17 @@ import jakarta.servlet.http.HttpSession;
 public class CarrinhoController {
 
     private final ProdutoRepository produtoRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    public CarrinhoController(ProdutoRepository produtoRepository) {
+
+    public CarrinhoController(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository) {
         this.produtoRepository = produtoRepository;
+        this.categoriaRepository = categoriaRepository;
+    }
+
+    @ModelAttribute("categorias")
+    public List<Categoria> carregarCategorias(){
+        return categoriaRepository.findAll();
     }
 
     @GetMapping

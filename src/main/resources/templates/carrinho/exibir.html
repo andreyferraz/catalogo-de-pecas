@@ -1,0 +1,45 @@
+<!-- src/main/resources/templates/carrinho/exibir.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout}">
+<head>
+    <title>Carrinho de Compras</title>
+</head>
+<body>
+    <div layout:fragment="content">
+    <div class="container">
+        <h3>Meu Carrinho</h3>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${carrinho}">
+                    <td th:text="${item.produto.nome}"></td>
+                    <td th:text="${item.quantidade}"></td>
+                    <td>
+                        <a th:href="@{'/carrinho/remover/' + ${item.produto.id}}" class="btn red">Remover</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Enviar Pedido</h4>
+        <form th:action="@{/carrinho/enviar}" method="post">
+            <div class="input-field">
+                <input type="text" name="nome" placeholder="Seu Nome" required>
+            </div>
+            <div class="input-field">
+                <input type="text" name="telefone" placeholder="Seu Telefone" required>
+            </div>
+            <button type="submit" class="btn blue">Enviar via WhatsApp</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
