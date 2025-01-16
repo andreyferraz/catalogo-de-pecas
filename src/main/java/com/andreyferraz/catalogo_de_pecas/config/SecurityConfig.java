@@ -17,7 +17,7 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http.authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers("/uploads/**", "/img/**").permitAll()
+                                .requestMatchers("/uploads/**", "/img/**", "/carrinho/**").permitAll()
                                 .requestMatchers("/", "/home", "/categorias/{id}", "/login", "/logout", "/pesquisar")
                                 .permitAll() // Apenas '/categorias/{id}' é público
                                 .requestMatchers(
