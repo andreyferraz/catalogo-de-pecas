@@ -104,7 +104,7 @@ public class CarrinhoController {
         }
 
         String mensagemFormatada = mensagem.toString().replace("\n", "%0A");
-        String urlWhatsApp = "https://api.whatsapp.com/send?phone=SEU_NUMERO_AQUI&text=" + mensagemFormatada;
+        String urlWhatsApp = "https://api.whatsapp.com/send?phone=+5514998761984&text=" + mensagemFormatada;
 
         return "redirect:" + urlWhatsApp;
     }

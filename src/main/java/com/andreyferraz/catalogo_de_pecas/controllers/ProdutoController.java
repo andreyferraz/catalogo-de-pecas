@@ -43,7 +43,7 @@ public class ProdutoController {
     }
 
     @ModelAttribute("categorias")
-    public List<Categoria> carregarCategorias(){
+    public List<Categoria> carregarCategorias() {
         return categoriaRepository.findAll();
     }
 
@@ -62,19 +62,27 @@ public class ProdutoController {
 
     @PostMapping("/salvar")
     public String salvarProduto(
-        @Valid Produto produto,
-        BindingResult result,
-        @RequestParam("imagem") MultipartFile imagem,
-        @RequestParam("categoria") UUID categoriaId,
-        Model model) {
+            @Valid Produto produto,
+            BindingResult result,
+            @RequestParam("imagem") MultipartFile imagem,
+            @RequestParam("categoria") UUID categoriaId,
+            Model model) {
+
         if (result.hasErrors()) {
             model.addAttribute("categorias", categoriaRepository.findAll());
             return "produtos/formulario";
         }
 
         if (!imagem.isEmpty()) {
+            // Validação do tamanho do arquivo (2MB = 2 * 1024 * 1024 bytes)
+            if (imagem.getSize() > 2 * 1024 * 1024) {
+                model.addAttribute("errorMessage", "O tamanho da imagem não pode exceder 2MB.");
+                model.addAttribute("categorias", categoriaRepository.findAll());
+                return "produtos/formulario";
+            }
+
             try {
-                // Caminho dentro do projeto, na pasta static/uploads
+                // Caminho para salvar a imagem
                 Path uploadPath = Paths.get("C:/uploads");
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
@@ -98,7 +106,7 @@ public class ProdutoController {
                 return "produtos/formulario";
             }
         } else {
-            // Mantem a imagem existente se nenhuma nova imagem for enviada
+            // Mantém a imagem existente se nenhuma nova imagem for enviada
             if (produto.getId() != null) {
                 Produto produtoExistente = produtoRepository.findById(produto.getId())
                         .orElseThrow(() -> new IllegalArgumentException("Produto inválido"));
