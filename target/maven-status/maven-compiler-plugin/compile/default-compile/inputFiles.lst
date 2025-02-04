@@ -1,0 +1,17 @@
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\CatalogoDePecasApplication.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\config\SecurityConfig.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\config\ThymeleafConfig.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\config\WebConfig.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\controllers\AdminController.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\controllers\CarrinhoController.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\controllers\CategoriaAdminController.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\controllers\CategoriaPublicController.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\controllers\HomeController.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\controllers\LoginController.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\controllers\ProdutoController.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\controllers\TestController.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\models\CarrinhoItem.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\models\Categoria.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\models\Produto.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\repositories\CategoriaRepository.java
+C:\Users\Andrêy Ferraz\Documents\catalogo-de-pecas\src\main\java\com\andreyferraz\catalogo_de_pecas\repositories\ProdutoRepository.java
