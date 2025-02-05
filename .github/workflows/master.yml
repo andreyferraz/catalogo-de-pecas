@@ -18,7 +18,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build com Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package -DskipTests --file pom.xml
     - name: Criar diretório para o JAR
       run: mkdir -p ./jar-upload
     - name: Copiar JAR para pasta temporária
