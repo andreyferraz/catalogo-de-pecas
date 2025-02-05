@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import com.andreyferraz.catalogo_de_pecas.models.CarrinhoItem;
 import com.andreyferraz.catalogo_de_pecas.models.Categoria;
@@ -104,7 +106,10 @@ public class CarrinhoController {
         }
 
         String mensagemFormatada = mensagem.toString().replace("\n", "%0A");
-        String urlWhatsApp = "https://api.whatsapp.com/send?phone=+5514998761984&text=" + mensagemFormatada;
+        //String urlWhatsApp = "https://api.whatsapp.com/send?phone=+5514998761984&text=" + mensagemFormatada;
+        String urlWhatsApp = "https://api.whatsapp.com/send?phone=+5527981076157&text=" + mensagemFormatada;
+
+        carrinho.clear();
 
         return "redirect:" + urlWhatsApp;
     }
