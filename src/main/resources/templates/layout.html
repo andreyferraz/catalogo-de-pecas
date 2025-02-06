@@ -65,7 +65,12 @@
                     <li sec:authorize="isAuthenticated()">
                     <a href="/admin/dashboard"> <i class="fa-solid fa-screwdriver-wrench"></i> Painel</a>
                 </li>  
-                <li><a href="/carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a></li>  
+                <!-- <li><a href="/carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a></li>   -->
+                <a href="/carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho <span th:if="${quantidadeCarrinho > 0}" 
+                    th:text="${quantidadeCarrinho}" 
+                    style="color: red; font-weight: bold; background: yellow; padding: 2px 5px; border-radius: 50%;">
+                </span></a>
+                
                 <!-- Link para Login (visível quando não autenticado) -->
                 <li sec:authorize="isAnonymous()">
                     <a href="/login"> <i class="fa-solid fa-right-to-bracket"></i> Login</a>

@@ -15,6 +15,7 @@
                 <thead>
                     <tr>
                         <th>Produto</th>
+                        <th>Preço</th>
                         <th>Quantidade</th>
                         <th>Ações</th>
                     </tr>
@@ -22,13 +23,37 @@
                 <tbody>
                     <tr th:each="item : ${carrinho}">
                         <td th:text="${item.produto.nome}"></td>
-                        <td th:text="${item.quantidade}"></td>
+                        <!-- <td th:text="${item.produto.preco}"></td> -->
+                        <td th:text="${#numbers.formatDecimal(item.produto.preco, 1, 2)}"></td>
+                        <td>
+                            <form th:action="@{/carrinho/alterar}" method="post" style="display: flex; align-items: center;">
+                                <input type="hidden" name="produtoId" th:value="${item.produto.id}">
+                        
+                                <!-- Botão de diminuir quantidade -->
+                                <button type="submit" name="acao" value="diminuir" class="btn-small red" style="margin-right: 5px;">-</button>
+                        
+                                <!-- Exibir quantidade -->
+                                <span th:text="${item.quantidade}" style="margin: 0 10px; font-weight: bold;"></span>
+                        
+                                <!-- Botão de aumentar quantidade -->
+                                <button type="submit" name="acao" value="aumentar" class="btn-small green" style="margin-left: 5px;">+</button>
+                            </form>
+                        </td>
+                        
                         <td>
                             <a th:href="@{'/carrinho/remover/' + ${item.produto.id}}" class="btn red">Remover</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                <div style="background-color: #4CAF50; padding: 10px 15px; border-radius: 5px;">
+                    <h4 style="color: white; font-weight: bold; margin: 0; font-size: 1.2rem;">
+                        Total: R$ <span th:text="${#numbers.formatDecimal(total, 1, 2)}"></span>
+                    </h4>
+                </div>
+            </div>
+            
 
             <h4>Enviar Pedido</h4>
             <form th:action="@{/carrinho/enviar}" method="post">
@@ -38,7 +63,7 @@
                 <div class="input-field">
                     <input type="text" name="telefone" placeholder="Seu Telefone" required>
                 </div>
-                <button type="submit" class="btn blue">Enviar via WhatsApp</button>
+                <button type="submit" class="btn blue">Enviar Pedido</button>
             </form>
         </div>
     </div>
