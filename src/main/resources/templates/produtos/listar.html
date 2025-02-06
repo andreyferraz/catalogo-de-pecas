@@ -24,6 +24,7 @@
                     <tr>
                         <th>Imagem</th>
                         <th>Nome</th>
+                        <th>Preço</th>
                         <th>Categoria</th>
                         <th>Ações</th>
                     </tr>
@@ -35,6 +36,7 @@
                                 onerror="this.src='/images/default-product.png'" />
                         </td>
                         <td th:text="${produto.nome}"></td>
+                        <td th:text="${#numbers.formatDecimal(produto.preco, 2, 'COMMA', 2, 'POINT')}"></td>
                         <td th:text="${produto.categoria.nome}"></td>
                         <td>
                             <a th:href="@{'/produtos/editar/' + ${produto.id}}" class="btn blue">Editar</a>

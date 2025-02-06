@@ -21,6 +21,7 @@ public class Produto {
     private UUID id;
 
     private String nome;
+    private Double preco;
     private String imagemPath;
 
     @ManyToOne
@@ -30,7 +31,8 @@ public class Produto {
     public String toString() {
         return "Produto{" +
                 "id=" + id +
-                ", nome='" + nome + '\'' +
+                ", nome='" + nome + 
+                ", preco=" + preco + '\'' +
                 ", categoria=" + (categoria != null ? categoria.getId() : null) +
                 '}';
     }
