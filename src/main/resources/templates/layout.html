@@ -4,14 +4,14 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Mister Tools - Peças para usinagem</title>
-    <!-- Favicon -->
     <link rel="icon" type="image/png"
           th:href="@{https://sulmatre.com.br/wp-content/uploads/2021/04/Engrenagem-Central-84072029-4.png}">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Estilos para garantir que o footer fique no final da página */
+        /* Garante que o footer fique no final */
         html, body {
             height: 100%;
             margin: 0;
@@ -23,84 +23,116 @@
             flex: 1;
         }
 
+        /* Ajuste do espaçamento da logo */
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            margin-top: 8px; /* Espaçamento para não colar no topo */
+        }
+
+        .brand-logo img {
+            height: 50px;
+        }
+
+        /* Sidenav responsivo */
+        .sidenav {
+            width: 250px;
+        }
+
+        .sidenav li a {
+            font-size: 18px;
+            padding: 10px;
+        }
+
+        /* Footer fixo */
         footer {
             background-color: #f8f8f8;
             padding: 20px 0;
             text-align: center;
             color: #333;
         }
-
-        .nav-wrapper .brand-logo {
-            display: flex;
-            align-items: center;
-            padding-left: 40px;
-            margin-top: 6px;  /* Ajuste a margem esquerda conforme necessário */
-        }
-
-        .nav-wrapper .center-menu {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
-
-        #titulo-produto-home {
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
-    <!-- Menu de navegação -->
-    <nav>
-        <div class="nav-wrapper blue">
+
+    <!-- Navbar -->
+    <nav class="blue">
+        <div class="nav-wrapper container">
+            <a href="#" class="sidenav-trigger" data-target="mobile-menu"><i class="fa-solid fa-bars"></i></a>
+            
+            <!-- Logo com espaçamento adequado -->
             <a href="/" class="brand-logo">
-                <img th:src="@{/img/mister-tools-logo@320x.png}" alt="Catálogo" style="height: 50px;">
+                <img th:src="@{/img/mister-tools-logo@320x.png}" alt="Catálogo">
             </a>
-            <ul id="nav-mobile" class="center-menu">
+
+            <!-- Menu desktop -->
+            <ul class="right hide-on-med-and-down">
                 <li><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
                 <li th:each="categoria : ${categorias}">
                     <a th:href="@{'/categorias/' + ${categoria.id}}" th:text="${categoria.nome}"></a>
                 </li>
-                    <!-- Link para painel (visível quando autenticado) -->
-                    <li sec:authorize="isAuthenticated()">
-                    <a href="/admin/dashboard"> <i class="fa-solid fa-screwdriver-wrench"></i> Painel</a>
-                </li>  
-                <!-- <li><a href="/carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho</a></li>   -->
-                <a href="/carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho <span th:if="${quantidadeCarrinho > 0}" 
-                    th:text="${quantidadeCarrinho}" 
-                    style="color: red; font-weight: bold; background: yellow; padding: 2px 5px; border-radius: 50%;">
-                </span></a>
-                
-                <!-- Link para Login (visível quando não autenticado) -->
-                <li sec:authorize="isAnonymous()">
-                    <a href="/login"> <i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                <li sec:authorize="isAuthenticated()">
+                    <a href="/admin/dashboard"><i class="fa-solid fa-screwdriver-wrench"></i> Painel</a>
                 </li>
-                <!-- Link para Logout (visível quando autenticado) -->
+                <li>
+                    <a href="/carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho <span th:if="${quantidadeCarrinho > 0}" 
+                        th:text="${quantidadeCarrinho}" 
+                        style="color: red; font-weight: bold; background: yellow; padding: 2px 5px; border-radius: 50%;">
+                    </span></a>
+                </li>
+                <li sec:authorize="isAnonymous()">
+                    <a href="/login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                </li>
                 <li sec:authorize="isAuthenticated()">
                     <a href="/logout"><i class="fa-solid fa-power-off"></i> Sair</a>
-                </li>              
+                </li>
             </ul>
         </div>
     </nav>
+
+    <!-- Menu lateral para dispositivos móveis -->
+    <ul class="sidenav" id="mobile-menu">
+        <li><a href="/"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li th:each="categoria : ${categorias}">
+            <a th:href="@{'/categorias/' + ${categoria.id}}" th:text="${categoria.nome}"></a>
+        </li>
+        <li sec:authorize="isAuthenticated()">
+            <a href="/admin/dashboard"><i class="fa-solid fa-screwdriver-wrench"></i> Painel</a>
+        </li>
+        <li>
+            <a href="/carrinho"><i class="fa-solid fa-cart-shopping"></i> Carrinho <span th:if="${quantidadeCarrinho > 0}" 
+                th:text="${quantidadeCarrinho}" 
+                style="color: red; font-weight: bold; background: yellow; padding: 2px 5px; border-radius: 50%;">
+            </span></a>
+        </li>
+        <li sec:authorize="isAnonymous()">
+            <a href="/login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+        </li>
+        <li sec:authorize="isAuthenticated()">
+            <a href="/logout"><i class="fa-solid fa-power-off"></i> Sair</a>
+        </li>
+    </ul>
 
     <!-- Conteúdo da página -->
     <div class="container container-flex" layout:fragment="content">
         <!-- Aqui o conteúdo da página será inserido -->
     </div>
 
-    <!-- Footer -->
+    <!-- Footer fixo -->
     <footer>
          <p><i class="fa-regular fa-copyright"></i> Desenvolvido por <a href="https://www.andreyferraz.com.br" target="_blank">Andrêy Ferraz</a> - <span id="year"></span></p>
     </footer>
 
+    <!-- Scripts -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var elems = document.querySelectorAll('select');
-            M.FormSelect.init(elems);
+            var elems = document.querySelectorAll('.sidenav');
+            M.Sidenav.init(elems);
         });
     </script>
 </body>
