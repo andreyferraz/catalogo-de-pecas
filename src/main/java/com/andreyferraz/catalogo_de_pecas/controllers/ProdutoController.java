@@ -60,6 +60,72 @@ public class ProdutoController {
         return "produtos/formulario";
     }
 
+    // @PostMapping("/salvar")
+    // public String salvarProduto(
+    // @Valid Produto produto,
+    // BindingResult result,
+    // @RequestParam("imagem") MultipartFile imagem,
+    // @RequestParam("categoria") UUID categoriaId,
+    // Model model) {
+
+    // if (result.hasErrors()) {
+    // model.addAttribute("categorias", categoriaRepository.findAll());
+    // return "produtos/formulario";
+    // }
+
+    // if (!imagem.isEmpty()) {
+    // // Validação do tamanho do arquivo (2MB = 2 * 1024 * 1024 bytes)
+    // if (imagem.getSize() > 2 * 1024 * 1024) {
+    // model.addAttribute("errorMessage", "O tamanho da imagem não pode exceder
+    // 2MB.");
+    // model.addAttribute("categorias", categoriaRepository.findAll());
+    // return "produtos/formulario";
+    // }
+
+    // try {
+    // // Caminho para salvar a imagem
+    // Path uploadPath = Paths.get("C:/uploads");
+    // if (!Files.exists(uploadPath)) {
+    // Files.createDirectories(uploadPath);
+    // System.out.println("Diretório de upload criado: " +
+    // uploadPath.toAbsolutePath().toString());
+    // }
+
+    // // Caminho completo do arquivo
+    // Path caminho = uploadPath.resolve(imagem.getOriginalFilename());
+    // System.out.println("Salvando imagem em: " +
+    // caminho.toAbsolutePath().toString());
+
+    // // Transferir o arquivo
+    // imagem.transferTo(caminho.toFile());
+    // System.out.println("Imagem salva com sucesso: " +
+    // caminho.toAbsolutePath().toString());
+
+    // // Configurar o caminho da imagem no produto
+    // produto.setImagemPath("/uploads/" + imagem.getOriginalFilename());
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // model.addAttribute("errorMessage", "Falha ao salvar a imagem. Por favor,
+    // tente novamente.");
+    // model.addAttribute("categorias", categoriaRepository.findAll());
+    // return "produtos/formulario";
+    // }
+    // } else {
+    // // Mantém a imagem existente se nenhuma nova imagem for enviada
+    // if (produto.getId() != null) {
+    // Produto produtoExistente = produtoRepository.findById(produto.getId())
+    // .orElseThrow(() -> new IllegalArgumentException("Produto inválido"));
+    // produto.setImagemPath(produtoExistente.getImagemPath());
+    // }
+    // }
+
+    // Categoria categoria = categoriaRepository.findById(categoriaId)
+    // .orElseThrow(() -> new IllegalArgumentException("Categoria inválida"));
+    // produto.setCategoria(categoria);
+    // produtoRepository.save(produto);
+    // return "redirect:/produtos";
+    // }
+
     @PostMapping("/salvar")
     public String salvarProduto(
             @Valid Produto produto,
@@ -73,44 +139,55 @@ public class ProdutoController {
             return "produtos/formulario";
         }
 
+        if (imagem.isEmpty() && (produto.getId() == null || produto.getImagemPath() == null)) {
+            model.addAttribute("errorMessage", "É obrigatório adicionar uma imagem ao produto.");
+            model.addAttribute("categorias", categoriaRepository.findAll());
+            return "produtos/formulario";
+        }
+
         if (!imagem.isEmpty()) {
-            // Validação do tamanho do arquivo (2MB = 2 * 1024 * 1024 bytes)
-            if (imagem.getSize() > 2 * 1024 * 1024) {
+            if (imagem.getSize() > 2 * 1024 * 1024) { // 2MB
                 model.addAttribute("errorMessage", "O tamanho da imagem não pode exceder 2MB.");
                 model.addAttribute("categorias", categoriaRepository.findAll());
                 return "produtos/formulario";
             }
 
             try {
-                // Caminho para salvar a imagem
-                Path uploadPath = Paths.get("C:/uploads");
+                Path uploadPath = Paths.get(uploadDir);
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
-                    System.out.println("Diretório de upload criado: " + uploadPath.toAbsolutePath().toString());
+                    System.out.println("Diretório de upload criado: " + uploadPath.toAbsolutePath());
                 }
 
-                // Caminho completo do arquivo
-                Path caminho = uploadPath.resolve(imagem.getOriginalFilename());
-                System.out.println("Salvando imagem em: " + caminho.toAbsolutePath().toString());
+                // Gerar um nome único para a imagem
+                String originalFilename = imagem.getOriginalFilename();
+                String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                String uniqueFilename = UUID.randomUUID().toString() + extension;
 
-                // Transferir o arquivo
+                Path caminho = uploadPath.resolve(uniqueFilename);
+
+                // Se for uma edição e o produto já tiver uma imagem, excluir a antiga
+                if (produto.getId() != null) {
+                    Produto produtoExistente = produtoRepository.findById(produto.getId())
+                            .orElseThrow(() -> new IllegalArgumentException("Produto inválido"));
+                    if (produtoExistente.getImagemPath() != null) {
+                        Path imagemAntiga = Paths.get(uploadDir,
+                                Paths.get(produtoExistente.getImagemPath()).getFileName().toString());
+                        Files.deleteIfExists(imagemAntiga);
+                        System.out.println("Imagem antiga deletada: " + imagemAntiga.toAbsolutePath());
+                    }
+                }
+
+                // Salvar a nova imagem
                 imagem.transferTo(caminho.toFile());
-                System.out.println("Imagem salva com sucesso: " + caminho.toAbsolutePath().toString());
+                System.out.println("Imagem salva com sucesso: " + caminho.toAbsolutePath());
 
-                // Configurar o caminho da imagem no produto
-                produto.setImagemPath("/uploads/" + imagem.getOriginalFilename());
+                produto.setImagemPath("/uploads/" + uniqueFilename);
             } catch (IOException e) {
                 e.printStackTrace();
                 model.addAttribute("errorMessage", "Falha ao salvar a imagem. Por favor, tente novamente.");
                 model.addAttribute("categorias", categoriaRepository.findAll());
                 return "produtos/formulario";
-            }
-        } else {
-            // Mantém a imagem existente se nenhuma nova imagem for enviada
-            if (produto.getId() != null) {
-                Produto produtoExistente = produtoRepository.findById(produto.getId())
-                        .orElseThrow(() -> new IllegalArgumentException("Produto inválido"));
-                produto.setImagemPath(produtoExistente.getImagemPath());
             }
         }
 
@@ -118,6 +195,7 @@ public class ProdutoController {
                 .orElseThrow(() -> new IllegalArgumentException("Categoria inválida"));
         produto.setCategoria(categoria);
         produtoRepository.save(produto);
+
         return "redirect:/produtos";
     }
 

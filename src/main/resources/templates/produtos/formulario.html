@@ -1,40 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 
 <head>
     <title>Formulário de Produto</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            form.addEventListener("submit", function (event) {
+                const imagemInput = document.querySelector("input[name='imagem']");
+                const produtoId = document.querySelector("input[name='id']").value;
 
+                if (!produtoId && imagemInput.files.length === 0) {
+                    alert("Você deve selecionar uma imagem para o produto!");
+                    event.preventDefault(); // Impede o envio do formulário
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
-
     <div layout:fragment="content">
         <div class="container">
             <h4 th:text="${produto.id == null ? 'Novo Produto' : 'Editar Produto'}"></h4>
             <form th:action="@{/produtos/salvar}" th:object="${produto}" method="post" enctype="multipart/form-data">
                 <!-- Campo oculto para o ID do produto -->
                 <input type="hidden" th:field="*{id}">
+
                 <div class="input-field">
                     <input type="text" id="nome" name="nome" th:field="*{nome}" required>
                     <label for="nome">Nome do Produto</label>
                 </div>
+
                 <div class="input-field">
                     <input type="number" id="preco" name="preco" th:field="*{preco}" required>
                     <label for="preco">Valor do produto</label>
                 </div>
+
                 <div class="input-field">
-                    <select th:field="*{categoria}">
+                    <select th:field="*{categoria}" required>
                         <option value="" disabled selected>Selecione uma categoria</option>
-                        <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
-                            th:text="${categoria.nome}"></option>
+                        <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}"></option>
                     </select>
                     <label>Categoria</label>
                 </div>
-                <!-- Exibir imagem existente -->
+
+                <!-- Exibir imagem existente na edição -->
                 <div th:if="${produto.imagemPath}">
+                    <p>Imagem Atual:</p>
                     <img th:src="@{${produto.imagemPath}}" alt="Imagem do Produto" style="max-width: 200px;">
                 </div>
+
+                <!-- Input de upload de imagem -->
                 <div class="file-field input-field">
                     <div class="btn blue">
                         <span>Selecionar Imagem</span>
@@ -44,11 +63,11 @@
                         <input class="file-path validate" type="text">
                     </div>
                 </div>
+
                 <button type="submit" class="btn waves-effect waves-light green">Salvar</button>
             </form>
         </div>
     </div>
-
 </body>
 
 </html>
