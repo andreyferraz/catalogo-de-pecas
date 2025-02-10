@@ -75,7 +75,7 @@ public class ProdutoController {
             @Valid Produto produto,
             BindingResult result,
             @RequestParam("imagem") MultipartFile imagem,
-            @RequestParam("categoria") UUID categoriaId,
+            @RequestParam("categoria.id") UUID categoriaId,
             Model model) {
     
         if (result.hasErrors()) {
