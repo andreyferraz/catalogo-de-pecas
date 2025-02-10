@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
 
 <head>
     <title>Formulário de Produto</title>
@@ -17,6 +16,10 @@
                     event.preventDefault(); // Impede o envio do formulário
                 }
             });
+
+            // Inicializa o componente de seleção
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems);
         });
     </script>
 </head>
@@ -40,18 +43,16 @@
                 </div>
 
                 <div class="input-field">
-                    <select th:field="*{categoria}" required>
-                        <option value="" disabled selected>Selecione uma categoria</option>
-                        <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}"></option>
+                    <select th:field="*{categoria.id}" required>
+                        <option value="" disabled th:selected="${produto.categoria == null}">Selecione uma categoria</option>
+                        <option th:each="categoria : ${categorias}" 
+                                th:value="${categoria.id}" 
+                                th:text="${categoria.nome}"
+                                th:selected="${produto.categoria != null and produto.categoria.id == categoria.id}">
+                        </option>
                     </select>
                     <label>Categoria</label>
-                </div>
-
-                <!-- Exibir imagem existente na edição -->
-                <div th:if="${produto.imagemPath}">
-                    <p>Imagem Atual:</p>
-                    <img th:src="@{${produto.imagemPath}}" alt="Imagem do Produto" style="max-width: 200px;">
-                </div>
+                </div>               
 
                 <!-- Input de upload de imagem -->
                 <div class="file-field input-field">
@@ -64,10 +65,23 @@
                     </div>
                 </div>
 
+                <!-- Exibir imagem existente na edição -->
+                <div th:if="${produto.imagemPath}">
+                    <p>Imagem Atual:</p>
+                    <img th:src="@{${produto.imagemPath}}" alt="Imagem do Produto" style="max-width: 200px;">
+                </div>
+
                 <button type="submit" class="btn waves-effect waves-light green">Salvar</button>
             </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems);
+        });
+    </script>
 </body>
 
 </html>
