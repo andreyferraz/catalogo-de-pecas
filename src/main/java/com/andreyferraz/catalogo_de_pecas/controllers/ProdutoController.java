@@ -1,11 +1,21 @@
 package com.andreyferraz.catalogo_de_pecas.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageWriter;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.stream.ImageOutputStream;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -60,72 +70,6 @@ public class ProdutoController {
         return "produtos/formulario";
     }
 
-    // @PostMapping("/salvar")
-    // public String salvarProduto(
-    // @Valid Produto produto,
-    // BindingResult result,
-    // @RequestParam("imagem") MultipartFile imagem,
-    // @RequestParam("categoria") UUID categoriaId,
-    // Model model) {
-
-    // if (result.hasErrors()) {
-    // model.addAttribute("categorias", categoriaRepository.findAll());
-    // return "produtos/formulario";
-    // }
-
-    // if (!imagem.isEmpty()) {
-    // // Validação do tamanho do arquivo (2MB = 2 * 1024 * 1024 bytes)
-    // if (imagem.getSize() > 2 * 1024 * 1024) {
-    // model.addAttribute("errorMessage", "O tamanho da imagem não pode exceder
-    // 2MB.");
-    // model.addAttribute("categorias", categoriaRepository.findAll());
-    // return "produtos/formulario";
-    // }
-
-    // try {
-    // // Caminho para salvar a imagem
-    // Path uploadPath = Paths.get("C:/uploads");
-    // if (!Files.exists(uploadPath)) {
-    // Files.createDirectories(uploadPath);
-    // System.out.println("Diretório de upload criado: " +
-    // uploadPath.toAbsolutePath().toString());
-    // }
-
-    // // Caminho completo do arquivo
-    // Path caminho = uploadPath.resolve(imagem.getOriginalFilename());
-    // System.out.println("Salvando imagem em: " +
-    // caminho.toAbsolutePath().toString());
-
-    // // Transferir o arquivo
-    // imagem.transferTo(caminho.toFile());
-    // System.out.println("Imagem salva com sucesso: " +
-    // caminho.toAbsolutePath().toString());
-
-    // // Configurar o caminho da imagem no produto
-    // produto.setImagemPath("/uploads/" + imagem.getOriginalFilename());
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // model.addAttribute("errorMessage", "Falha ao salvar a imagem. Por favor,
-    // tente novamente.");
-    // model.addAttribute("categorias", categoriaRepository.findAll());
-    // return "produtos/formulario";
-    // }
-    // } else {
-    // // Mantém a imagem existente se nenhuma nova imagem for enviada
-    // if (produto.getId() != null) {
-    // Produto produtoExistente = produtoRepository.findById(produto.getId())
-    // .orElseThrow(() -> new IllegalArgumentException("Produto inválido"));
-    // produto.setImagemPath(produtoExistente.getImagemPath());
-    // }
-    // }
-
-    // Categoria categoria = categoriaRepository.findById(categoriaId)
-    // .orElseThrow(() -> new IllegalArgumentException("Categoria inválida"));
-    // produto.setCategoria(categoria);
-    // produtoRepository.save(produto);
-    // return "redirect:/produtos";
-    // }
-
     @PostMapping("/salvar")
     public String salvarProduto(
             @Valid Produto produto,
@@ -133,70 +77,112 @@ public class ProdutoController {
             @RequestParam("imagem") MultipartFile imagem,
             @RequestParam("categoria") UUID categoriaId,
             Model model) {
-
+    
         if (result.hasErrors()) {
             model.addAttribute("categorias", categoriaRepository.findAll());
             return "produtos/formulario";
         }
-
+    
         if (imagem.isEmpty() && (produto.getId() == null || produto.getImagemPath() == null)) {
             model.addAttribute("errorMessage", "É obrigatório adicionar uma imagem ao produto.");
             model.addAttribute("categorias", categoriaRepository.findAll());
             return "produtos/formulario";
         }
-
+    
         if (!imagem.isEmpty()) {
-            if (imagem.getSize() > 2 * 1024 * 1024) { // 2MB
-                model.addAttribute("errorMessage", "O tamanho da imagem não pode exceder 2MB.");
+            if (imagem.getSize() > 25 * 1024 * 1024) { // Máximo 25MB antes da compressão
+                model.addAttribute("errorMessage", "O tamanho da imagem não pode exceder 25MB.");
                 model.addAttribute("categorias", categoriaRepository.findAll());
                 return "produtos/formulario";
             }
-
+    
             try {
                 Path uploadPath = Paths.get(uploadDir);
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
-                    System.out.println("Diretório de upload criado: " + uploadPath.toAbsolutePath());
                 }
-
-                // Gerar um nome único para a imagem
-                String originalFilename = imagem.getOriginalFilename();
-                String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-                String uniqueFilename = UUID.randomUUID().toString() + extension;
-
+    
+                String uniqueFilename = UUID.randomUUID().toString() + ".jpg";
                 Path caminho = uploadPath.resolve(uniqueFilename);
-
-                // Se for uma edição e o produto já tiver uma imagem, excluir a antiga
+    
+                // Lendo a imagem original
+                BufferedImage imagemOriginal = ImageIO.read(imagem.getInputStream());
+    
+                // Redimensionar a imagem para um máximo de 800x600 pixels
+                BufferedImage imagemRedimensionada = redimensionarImagem(imagemOriginal, 800, 600);
+    
+                // Compressão JPEG para reduzir o tamanho final
+                salvarJPEGComQualidade(imagemRedimensionada, caminho.toFile(), 0.6f); // Qualidade 60%
+    
+                // Excluir imagem antiga caso exista (edição)
                 if (produto.getId() != null) {
                     Produto produtoExistente = produtoRepository.findById(produto.getId())
                             .orElseThrow(() -> new IllegalArgumentException("Produto inválido"));
                     if (produtoExistente.getImagemPath() != null) {
-                        Path imagemAntiga = Paths.get(uploadDir,
+                        Path imagemAntiga = Paths.get(uploadDir, 
                                 Paths.get(produtoExistente.getImagemPath()).getFileName().toString());
                         Files.deleteIfExists(imagemAntiga);
-                        System.out.println("Imagem antiga deletada: " + imagemAntiga.toAbsolutePath());
                     }
                 }
-
-                // Salvar a nova imagem
-                imagem.transferTo(caminho.toFile());
-                System.out.println("Imagem salva com sucesso: " + caminho.toAbsolutePath());
-
+    
                 produto.setImagemPath("/uploads/" + uniqueFilename);
             } catch (IOException e) {
                 e.printStackTrace();
-                model.addAttribute("errorMessage", "Falha ao salvar a imagem. Por favor, tente novamente.");
+                model.addAttribute("errorMessage", "Falha ao salvar a imagem.");
                 model.addAttribute("categorias", categoriaRepository.findAll());
                 return "produtos/formulario";
             }
         }
-
+    
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new IllegalArgumentException("Categoria inválida"));
         produto.setCategoria(categoria);
         produtoRepository.save(produto);
-
+    
         return "redirect:/produtos";
+    }
+    
+    // Método para redimensionar imagem
+    private BufferedImage redimensionarImagem(BufferedImage imagemOriginal, int larguraMax, int alturaMax) {
+        int largura = imagemOriginal.getWidth();
+        int altura = imagemOriginal.getHeight();
+    
+        // Se a imagem já for menor, não faz nada
+        if (largura <= larguraMax && altura <= alturaMax) {
+            return imagemOriginal;
+        }
+    
+        // Calcula nova largura e altura mantendo a proporção
+        float proporcao = Math.min((float) larguraMax / largura, (float) alturaMax / altura);
+        int novaLargura = Math.round(largura * proporcao);
+        int novaAltura = Math.round(altura * proporcao);
+    
+        BufferedImage novaImagem = new BufferedImage(novaLargura, novaAltura, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = novaImagem.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(imagemOriginal, 0, 0, novaLargura, novaAltura, null);
+        g.dispose();
+    
+        return novaImagem;
+    }
+    
+    // Método para salvar JPEG com compressão
+    private void salvarJPEGComQualidade(BufferedImage imagem, File arquivo, float qualidade) throws IOException {
+        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpeg");
+        if (!writers.hasNext()) {
+            throw new IllegalStateException("Nenhum writer encontrado para JPEG!");
+        }
+        ImageWriter writer = writers.next();
+    
+        try (ImageOutputStream ios = ImageIO.createImageOutputStream(arquivo)) {
+            writer.setOutput(ios);
+            ImageWriteParam param = writer.getDefaultWriteParam();
+            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            param.setCompressionQuality(qualidade);
+            writer.write(null, new javax.imageio.IIOImage(imagem, null, null), param);
+        } finally {
+            writer.dispose();
+        }
     }
 
     @GetMapping("/editar/{id}")
