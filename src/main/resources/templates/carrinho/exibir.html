@@ -46,14 +46,14 @@
                     </tr>
                 </tbody>
             </table>
-            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <a th:href="@{/}" class="btn grey">Adicionar mais produtos</a>
                 <div style="background-color: #4CAF50; padding: 10px 15px; border-radius: 5px;">
                     <h4 style="color: white; font-weight: bold; margin: 0; font-size: 1.2rem;">
                         Total: R$ <span th:text="${#numbers.formatDecimal(total, 1, 2)}"></span>
                     </h4>
                 </div>
             </div>
-            
 
             <h4>Enviar Pedido</h4>
             <form th:action="@{/carrinho/enviar}" method="post">
