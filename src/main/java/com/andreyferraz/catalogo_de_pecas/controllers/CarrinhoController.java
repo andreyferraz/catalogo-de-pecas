@@ -132,7 +132,7 @@ public class CarrinhoController {
         // Codifica a mensagem corretamente para URL
         String mensagemFormatada = URLEncoder.encode(mensagem.toString(), StandardCharsets.UTF_8);
 
-        String urlWhatsApp = "https://api.whatsapp.com/send?phone=+5527981076157&text=" + mensagemFormatada;
+        String urlWhatsApp = "https://api.whatsapp.com/send?phone=+5514998761984&text=" + mensagemFormatada;
 
         carrinho.clear();
 
