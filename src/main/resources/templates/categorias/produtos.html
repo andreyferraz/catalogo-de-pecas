@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
 <head>
     <title>Produtos da Categoria</title>
     <meta charset="UTF-8"> <!-- Configurar charset para UTF-8 -->
@@ -10,19 +10,55 @@
         .product-card {
             margin: 20px 0;
         }
+
         .product-image {
             width: 100%;
-            height: 200px;
+            height: 100px;
             object-fit: cover;
         }
+
         .product-info {
             padding: 20px;
         }
+
         .product-form {
             margin-top: 20px;
         }
+
+        /* Garante que a linha dos cards seja flexível */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /* Aplica layout flex para os cards e define altura uniforme somente para desktop */
+        @media (min-width: 992px) {
+            .card {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 500px;
+            }
+
+            /* Faz com que o conteúdo ocupe o espaço restante, evitando que títulos extensos afetem a altura */
+            .card-content {
+                flex-grow: 1;
+                overflow: hidden;
+            }
+
+            .card-title {
+                font-size: 18px !important;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .product-image {
+                height: 250px !important;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div layout:fragment="content">
         <div class="container">
@@ -32,10 +68,7 @@
                     <div class="card product-card">
                         <div class="card-image">
                             <!-- Imagem do Produto -->
-                            <img 
-                                th:src="${produto.imagemPath}" 
-                                alt="Imagem do Produto" 
-                                class="product-image"
+                            <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="product-image"
                                 onerror="this.src='/images/default-product.png'" />
                         </div>
                         <div class="card-content product-info">
@@ -52,7 +85,7 @@
                                     <label for="quantidade">Quantidade</label>
                                 </div>
                                 <button type="submit" class="btn waves-effect waves-light green">
-                                    <i class="fa-solid fa-cart-shopping"></i> Adicionar ao Carrinho
+                                    <i class="fa-solid fa-cart-shopping"></i> Comprar
                                 </button>
                             </form>
                         </div>
@@ -64,4 +97,5 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
+
 </html>

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <title>Catálogo de Peças para Usinagem</title>
@@ -13,13 +11,46 @@
             height: 50px;
             object-fit: cover;
         }
+
         .card-image img {
             width: 100%;
-            height: 200px;
+            height: 100px;
             object-fit: cover;
         }
+
         .product-form {
             margin-top: 10px;
+        }
+
+        /* Garante que a linha dos cards seja flexível */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        /* Aplica layout flex para os cards e define altura uniforme somente para desktop */
+        @media (min-width: 992px) {
+            .card {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 500px;
+            }
+
+            /* Faz com que o conteúdo ocupe o espaço restante, evitando que títulos extensos afetem a altura */
+            .card-content {
+                flex-grow: 1;
+                overflow: hidden;
+            }
+
+            .card-title {
+                font-size: 18px !important;
+            }
+        }
+        @media (max-width: 991.98px) {
+            .card-image img {
+                height: 250px !important;
+            }
         }
     </style>
 </head>
@@ -60,7 +91,7 @@
                             <td th:text="${produto.categoria.nome}"></td>
                             <td>
                                 <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="product-icon"
-                                     onerror="this.src='/images/default-product.png'" />
+                                    onerror="this.src='/images/default-product.png'" />
                             </td>
                             <td>
                                 <form th:action="@{/carrinho/adicionar}" method="post" class="product-form">
@@ -70,7 +101,7 @@
                                         <label for="quantidade">Quantidade</label>
                                     </div>
                                     <button type="submit" class="btn waves-effect waves-light green">
-                                        <i class="fa-solid fa-cart-shopping"></i> Adicionar ao Carrinho
+                                        <i class="fa-solid fa-cart-shopping"></i> Comprar
                                     </button>
                                 </form>
                             </td>
@@ -85,11 +116,13 @@
                     <div class="card">
                         <div class="card-image">
                             <img th:src="${produto.imagemPath}" alt="Imagem do Produto" class="responsive-img"
-                                 onerror="this.src='/images/default-product.png'" />
+                                onerror="this.src='/images/default-product.png'" />
                         </div>
                         <div class="card-content">
                             <span id="titulo-produto-home" class="card-title" th:text="${produto.nome}"></span>
-                           <p>R$<span th:text="${#numbers.formatDecimal(produto.preco, 2, 'COMMA', 2, 'POINT')}"></span></p>
+                            <p>R$<span
+                                    th:text="${#numbers.formatDecimal(produto.preco, 2, 'COMMA', 2, 'POINT')}"></span>
+                            </p>
                         </div>
                         <div class="card-action">
                             <form th:action="@{/carrinho/adicionar}" method="post" class="product-form">
@@ -99,7 +132,7 @@
                                     <label for="quantidade">Quantidade</label>
                                 </div>
                                 <button type="submit" class="btn waves-effect waves-light green">
-                                    <i class="fa-solid fa-cart-shopping"></i> Adicionar ao Carrinho
+                                    <i class="fa-solid fa-cart-shopping"></i> Comprar
                                 </button>
                             </form>
                         </div>
@@ -109,6 +142,7 @@
         </div>
     </div>
 
- 
+
 </body>
+
 </html>
