@@ -1,0 +1,24 @@
+spring.application.name=catalogo-de-pecas
+# Configuração do banco de dados MySQL
+spring.datasource.url=jdbc:mysql://<HOST>:<PORT>/<DATABASE_NAME>?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+spring.datasource.username=<SEU_USUARIO>
+spring.datasource.password=<SUA_SENHA>
+# Dialeto do MySQL
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+# Outras configurações JPA
+spring.jpa.hibernate.ddl-auto=update
+management.endpoints.web.exposure.include=*
+spring.jpa.show-sql=true
+# Configuração do diretório para armazenar as imagens
+upload.dir=C:/uploads
+spring.servlet.multipart.enabled=true
+# Configuração de encoding
+spring.http.encoding.charset=UTF-8
+spring.http.encoding.enabled=true
+spring.http.encoding.force=true
+# Configurações de limite de upload
+spring.servlet.multipart.enabled=true
+# Tamanho máximo por arquivo (2MB)
+spring.servlet.multipart.max-file-size=25MB
+# Tamanho máximo para a requisição inteira (2MB)
+spring.servlet.multipart.max-request-size=25MB
