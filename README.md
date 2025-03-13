@@ -39,7 +39,7 @@ Um catálogo online de peças para usinagem desenvolvido com Spring Boot, Thymel
 1.  **Clone o repositório:**
 
     ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
+    git clone https://github.com/andreyferraz/catalogo-de-pecas
     ```
 2.  **Configure o banco de dados:**
 

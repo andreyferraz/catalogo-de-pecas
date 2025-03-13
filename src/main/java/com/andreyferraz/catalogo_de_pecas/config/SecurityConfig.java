@@ -49,7 +49,7 @@ public class SecurityConfig {
         @Bean
         public UserDetailsService userDetailsService() {
                 UserDetails user = User.withUsername("admin")
-                                .password(passwordEncoder().encode("595110"))
+                                .password(passwordEncoder().encode("admin"))
                                 .roles("ADMIN")
                                 .build();
 
